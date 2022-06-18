@@ -16,18 +16,32 @@ const greeting = document.querySelector("#greeting");
 // }
 
 const HIDDEN_CLASSNAME = "hidden";
+const USERNAME_KEY = "username";
 
 function onLoginSubmit(event){
-    event.preventDefault();
     // 브라우저가 기본 동작을 실행하지 못하게 막기 
     // event object는 preventDefault함수를 기본적으로 갖고 있음
     event.preventDefault();
     loginForm.classList.add(HIDDEN_CLASSNAME);
     const username = loginInput.value;
-    console.log(username);
+    localStorage.setItem(USERNAME_KEY, username)
+    
+    paintGreetings(username);
+}
+
+function paintGreetings(username){
     greeting.innerText = "Hello! " + username;
     greeting.classList.remove(HIDDEN_CLASSNAME);
 }
 
-// loginButton.addEventListener('click', onLoginBtnClick);
-loginForm.addEventListener('submit', onLoginSubmit);
+
+const saveUsername = localStorage.getItem("username"); 
+
+if(saveUsername === null){
+    //show the form
+    loginForm.classList.remove(HIDDEN_CLASSNAME);
+    loginForm.addEventListener('submit', onLoginSubmit);
+}else{
+    //show the greetings
+    paintGreetings(saveUsername);
+}
